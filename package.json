@@ -1,0 +1,32 @@
+{
+  "name": "glacier",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "scripts": {
+    "prebuild": "bpkg ./node_modules/webview-nodejs dist/webview.js",
+    "build": "esbuild --bundle . --outfile=dist/index.pack.js --platform=node",
+    "sea": "node-sea -e dist/index.pack.js -o example.exe",
+    "ico": "resedit -i example.exe -o example.exe --icon 1,resources/icon.ico",
+    "test": "npm run build && npm run sea"
+  },
+  "keywords": [],
+  "author": "AuroraTeam",
+  "license": "MIT",
+  "dependencies": {
+    "webview-nodejs": "^0.4.0"
+  },
+  "devDependencies": {
+    "@liudonghua123/node-sea": "^0.1.4",
+    "bpkg": "^0.7.0",
+    "esbuild": "^0.19.11",
+    "resedit-cli": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AuroraTeam/Glacier.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AuroraTeam/Glacier/issues"
+  },
+  "homepage": "https://github.com/AuroraTeam/Glacier#readme"
+}
