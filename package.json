@@ -7,12 +7,14 @@
     "build": "esbuild --bundle . --outfile=dist/index.pack.js --platform=node",
     "sea": "node-sea -e dist/index.pack.js -o example.exe",
     "ico": "resedit -i example.exe -o example.exe --icon 1,resources/icon.ico",
+    "ico2": "node resedit.mjs",
     "test": "npm run build && npm run sea"
   },
   "keywords": [],
   "author": "AuroraTeam",
   "license": "MIT",
   "dependencies": {
+    "resedit": "^2.0.0",
     "webview-nodejs": "^0.4.0"
   },
   "devDependencies": {
