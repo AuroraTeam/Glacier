@@ -1,10 +1,12 @@
 {
   "name": "glacier",
   "version": "0.0.1",
-  "main": "src/index.js",
+  "main": "dist/index.pack.js",
   "scripts": {
     "prebuild": "bpkg ./node_modules/webview-nodejs dist/webview.js",
-    "build": "esbuild --bundle . --outfile=dist/index.pack.js --platform=node",
+    "build": "npm run build:worker && npm run build:main",
+    "build:worker": "esbuild src/worker.js --bundle --outfile=dist/worker.txt --platform=node --minify",
+    "build:main": "esbuild src/index.js --bundle --outfile=dist/index.pack.js --loader:.txt=base64 --platform=node",
     "sea": "node-sea -e dist/index.pack.js -o example.exe",
     "ico": "resedit -i example.exe -o example.exe --icon 1,resources/icon.ico",
     "ico2": "node resedit.mjs",
@@ -20,7 +22,7 @@
   "devDependencies": {
     "@liudonghua123/node-sea": "^0.1.4",
     "bpkg": "^0.7.0",
-    "esbuild": "^0.19.11",
+    "esbuild": "^0.19.12",
     "resedit-cli": "^2.0.0"
   },
   "repository": {
