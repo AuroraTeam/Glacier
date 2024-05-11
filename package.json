@@ -1,34 +1,16 @@
 {
   "name": "glacier",
-  "version": "0.0.1",
-  "main": "dist/index.pack.js",
-  "scripts": {
-    "prebuild": "bpkg ./node_modules/webview-nodejs dist/webview.js",
-    "build": "npm run build:worker && npm run build:main",
-    "build:worker": "esbuild src/worker.js --bundle --outfile=dist/worker.txt --platform=node --minify",
-    "build:main": "esbuild src/index.js --bundle --outfile=dist/index.pack.js --loader:.txt=base64 --platform=node",
-    "sea": "node-sea -e dist/index.pack.js -o example.exe",
-    "ico": "resedit -i example.exe -o example.exe --icon 1,resources/icon.ico",
-    "ico2": "node resedit.mjs",
-    "test": "npm run build && npm run sea"
-  },
-  "keywords": [],
-  "author": "AuroraTeam",
-  "license": "MIT",
-  "dependencies": {
-    "resedit": "^2.0.0",
-    "webview-nodejs": "^0.4.0"
-  },
-  "devDependencies": {
-    "@liudonghua123/node-sea": "^0.1.4",
-    "bpkg": "^0.7.0",
-    "esbuild": "^0.19.12",
-    "resedit-cli": "^2.0.0"
-  },
+  "version": "0.1.0",
+  "description": "Glacier is a framework that allows you to build cross-platform desktop applications using Node.js and webview.",
+  "workspaces": [
+    "packages/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AuroraTeam/Glacier.git"
   },
+  "author": "AuroraTeam",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/AuroraTeam/Glacier/issues"
   },
