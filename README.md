@@ -4,4 +4,4 @@
 
 ## How to build example app
 
-run `npm i` and `npm run test`
+run `npm i` and `npm run build:example`

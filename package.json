@@ -14,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/AuroraTeam/Glacier/issues"
   },
-  "homepage": "https://github.com/AuroraTeam/Glacier#readme"
+  "homepage": "https://github.com/AuroraTeam/Glacier#readme",
+  "scripts": {
+    "build:example" :"npm run build:webview -w packages/webview && npm run build -w packages/core && npm run build -w packages/example-app"
+  }
 }
