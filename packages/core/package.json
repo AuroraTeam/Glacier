@@ -9,7 +9,6 @@
         "build:worker": "esbuild src/worker.ts --bundle --outfile=dist/worker.txt --platform=node --minify",
         "build:main": "esbuild src/index.ts --bundle --outfile=dist/index.pack.js --loader:.txt=base64 --platform=node",
         "types": "tsc",
-        "compress": "node upx.js",
         "test": "npm run build && npm run sea",
         "prettier": "prettier --config .prettierrc.json --write src",
         "typecheck": "tsc --noEmit",
