@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@liudonghua123/node-sea": "^0.1.4",
-    "resedit": "^2.0.2"
+    "resedit": "^2.0.2",
+    "upx": "github:kostya-main/upx"
   }
 }

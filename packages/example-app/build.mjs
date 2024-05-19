@@ -1,5 +1,6 @@
 import * as esbuild from 'esbuild';
 import sea from "@liudonghua123/node-sea";
+import * as UPX from 'upx';
 
 import * as fs from 'fs';
 import * as PELibrary from 'pe-library';
@@ -22,9 +23,16 @@ class Build {
         )
     }
 
-    //compress (file){
-    //    //Когда переделаю модуль upx в ESM перенесу суда код
-    //}
+    compress (file){
+        
+        const upx = new UPX.default(file, {best : true})
+        upx.output('main.exe')
+        .start().then(function(stats){
+          console.log(stats)
+        }).catch(function (err) {
+          console.log(err)
+        })
+    }
 
     setIcon (bin, icon, fileDescription, productName) {
         process.chdir(import.meta.dirname);
@@ -72,3 +80,4 @@ const build = new Build;
 
 await build.bundle('index.mjs', 'dist/example.exe');
 build.setIcon('dist/example.exe', 'resources/icon.ico', 'Demo project', 'Glacier');
+build.compress('dist/example_modified.exe');
