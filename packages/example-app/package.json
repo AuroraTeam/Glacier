@@ -1,20 +1,15 @@
 {
-  "name": "@glacier/example-app",
-  "version": "0.1.0",
-  "main": "index.mjs",
-  "type": "module",
-  "author": "AuroraTeam",
-  "license": "MIT",
-  "description": "Example app for Glacier",
-  "scripts": {
-    "build": "node build.mjs"
-  },
-  "dependencies": {
-    "@glacier/core": "^0.1.0"
-  },
-  "devDependencies": {
-    "@liudonghua123/node-sea": "^0.1.4",
-    "resedit": "^2.0.2",
-    "upx": "github:kostya-main/upx"
-  }
+    "name": "@glacier/example-app",
+    "version": "0.1.0",
+    "main": "index.mjs",
+    "type": "module",
+    "author": "AuroraTeam",
+    "license": "MIT",
+    "description": "Example Glacier app",
+    "scripts": {
+        "build": "glacier build"
+    },
+    "dependencies": {
+        "@glacier/core": "^0.1.0"
+    }
 }

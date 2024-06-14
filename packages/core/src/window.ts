@@ -1,19 +1,20 @@
 import { Buffer } from 'buffer';
 import { Worker } from 'node:worker_threads';
 
+import worker from '../dist/worker.txt';
 import { WindowConfig } from './windowConfig';
-import worker from './workerImport';
-
-const _worker = Buffer.from(worker, 'base64').toString('utf-8');
 
 class Window {
     #worker: Worker;
 
     constructor(windowConfig: WindowConfig) {
-        this.#worker = new Worker(_worker, {
-            workerData: windowConfig,
-            eval: true,
-        });
+        this.#worker = new Worker(
+            Buffer.from(worker, 'base64').toString('utf-8'),
+            {
+                workerData: windowConfig,
+                eval: true,
+            },
+        );
     }
 
     on(event: 'error', listener: (err: Error) => void): this;

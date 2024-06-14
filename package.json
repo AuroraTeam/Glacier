@@ -1,21 +1,21 @@
 {
-  "name": "glacier",
-  "version": "0.1.0",
-  "description": "Glacier is a framework that allows you to build cross-platform desktop applications using Node.js and webview.",
-  "workspaces": [
-    "packages/*"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AuroraTeam/Glacier.git"
-  },
-  "author": "AuroraTeam",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/AuroraTeam/Glacier/issues"
-  },
-  "homepage": "https://github.com/AuroraTeam/Glacier#readme",
-  "scripts": {
-    "build:example" :"npm run build:webview -w packages/webview && npm run build -w packages/core && npm run build -w packages/example-app"
-  }
+    "name": "glacier",
+    "version": "0.1.0",
+    "description": "Glacier is a framework that allows you to build cross-platform desktop applications using Node.js and webview.",
+    "workspaces": [
+        "packages/*"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AuroraTeam/Glacier.git"
+    },
+    "author": "AuroraTeam",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/AuroraTeam/Glacier/issues"
+    },
+    "homepage": "https://github.com/AuroraTeam/Glacier#readme",
+    "scripts": {
+        "build:example": "npm run build:webview -w packages/webview && npm run build -w packages/core && npm run build -w packages/example-app"
+    }
 }

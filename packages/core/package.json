@@ -3,11 +3,17 @@
     "version": "0.1.0",
     "main": "dist/index.pack.js",
     "types": "dist/types/index.d.ts",
+    "type": "module",
+    "bin": {
+        "glacier": "cli/index.js"
+    },
+    "engines": {
+        "node": ">=20.11.0"
+    },
     "scripts": {
-        "prebuild": "bpkg ../../node_modules/webview-nodejs dist/webview.js",
         "build": "npm run build:worker && npm run build:main && npm run types",
         "build:worker": "esbuild src/worker.ts --bundle --outfile=dist/worker.txt --platform=node --minify",
-        "build:main": "esbuild src/index.ts --bundle --outfile=dist/index.pack.js --loader:.txt=base64 --platform=node",
+        "build:main": "esbuild src/index.ts --bundle --outfile=dist/index.pack.js --loader:.txt=base64 --platform=node --format=esm --minify",
         "types": "tsc",
         "test": "npm run build && npm run sea",
         "prettier": "prettier --config .prettierrc.json --write src",
@@ -20,7 +26,11 @@
     "license": "MIT",
     "dependencies": {
         "@glacier/webview": "^0.1.0",
-        "webview-nodejs": "^0.4.0"
+        "@liudonghua123/node-sea": "^0.1.4",
+        "commander": "^12.1.0",
+        "esbuild": "^0.21.5",
+        "resedit": "^2.0.2",
+        "upx": "github:kostya-main/upx"
     },
     "devDependencies": {
         "@tsconfig/node-lts": "^20.1.3",
@@ -28,13 +38,10 @@
         "@types/node": "^20.12.11",
         "@typescript-eslint/eslint-plugin": "^7.1.1",
         "@typescript-eslint/parser": "^7.1.1",
-        "bpkg": "^0.7.0",
-        "esbuild": "^0.19.12",
         "eslint": "^8.56.0",
         "import-sort-style-module": "^6.0.0",
         "prettier": "^3.2.5",
         "prettier-plugin-import-sort": "^0.0.7",
-        "resedit-cli": "^2.0.0",
         "typescript": "^5.4.5"
     },
     "repository": {
