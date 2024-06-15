@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <style>
+            body {
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                text-align: center;
+                font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial,
+                    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+                height: 100vh;
+            }
+            h1 {
+                font-size: 2.5rem;
+                font-weight: 300;
+                margin: 0.5rem 0;
+            }
+            p {
+                line-height: 1.5;
+                margin: 0.5rem 0;
+            }
+            pre {
+                font-size: 14px;
+                margin: 0.25rem 0;
+            }
+            code {
+                background: #f5f5f5;
+                border-radius: 0.4rem;
+                padding: 0.2rem 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <img src="./glacier.png" alt="Glacier" />
+        <h1>Glacier</h1>
+        <p>This is an example Glacier app.</p>
+        <pre>Node.js version: <code id="node"></code></pre>
+        <pre>V8 version: <code id="v8"></code></pre>
+        <pre>Glacier version: <code id="glacier"></code></pre>
+        <script>
+            document.getElementById("node").textContent = __versions.node;
+            document.getElementById("v8").textContent = __versions.v8;
+            document.getElementById("glacier").textContent = __versions.glacier;
+        </script>
+    </body>
+</html>

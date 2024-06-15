@@ -28,6 +28,14 @@ class Window {
     setHtml(html: string) {
         this.#worker.postMessage({ type: 'setHtml', html });
     }
+
+    loadUrl(url: string) {
+        this.#worker.postMessage({ type: 'loadUrl', url });
+    }
+
+    loadFile(path: string) {
+        this.#worker.postMessage({ type: 'loadFile', path });
+    }
 }
 
 export { Window };
