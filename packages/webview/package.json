@@ -1,18 +1,27 @@
 {
-    "name": "@glacier/webview",
-    "version": "0.1.0",
+    "name": "@glacier-app/webview",
+    "version": "0.1.2",
     "main": "index.js",
     "types": "index.d.ts",
     "scripts": {
-        "build:webview": "bpkg ../../node_modules/webview-nodejs webview.js",
-        "prepublish": "npm run build:webview"
+        "postinstall": "node build.js"
     },
     "author": "AuroraTeam",
     "license": "MIT",
-    "dependencies": {
-        "webview-nodejs": "^0.4.3"
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AuroraTeam/Glacier.git"
     },
-    "devDependencies": {
+    "bugs": {
+        "url": "https://github.com/AuroraTeam/Glacier/issues"
+    },
+    "homepage": "https://github.com/AuroraTeam/Glacier#readme",
+    "files": [
+        "build.js",
+        "index.d.ts"
+    ],
+    "dependencies": {
+        "webview-nodejs": "^0.4.3",
         "bpkg": "^0.9.2"
     }
 }

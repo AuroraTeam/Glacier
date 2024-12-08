@@ -1,4 +1,4 @@
-import { Window } from "@glacier/core";
+import { Window } from "@glacier-app/core";
 import { join } from "path";
 
 const window = new Window({

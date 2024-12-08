@@ -4,13 +4,15 @@ import {
     workerData,
 } from 'node:worker_threads';
 
-import { Webview } from '@glacier/webview';
+import { Webview } from '@glacier-app/webview';
 
+import { version } from '../../package.json';
+import { WindowConfig } from '../core/windowConfig';
 import defaultHtml from './default.html';
-import { WindowConfig } from './windowConfig';
+
+process.versions['glacier'] = version;
 
 const windowConfig = workerData as WindowConfig;
-
 const webviewWindow = new Webview(windowConfig.debug || false);
 
 webviewWindow.bind('__call_backend', () => {
@@ -22,12 +24,10 @@ webviewWindow.bind('__call_backend', () => {
     processMessage(message.message);
 });
 
-const { version } = require('../package.json');
-
-const { node, v8 } = process.versions;
+const { node, v8, glacier } = process.versions;
 
 webviewWindow.init(
-    `setInterval(() => __call_backend(), 4);const __versions = {node:"${node}", v8:"${v8}", glacier:"${version}"};`,
+    `setInterval(() => __call_backend(), 4);const __versions = {node:"${node}", v8:"${v8}", glacier:"${glacier}"};`,
 );
 
 if (windowConfig.width && windowConfig.height) {

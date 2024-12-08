@@ -1,5 +1,5 @@
 {
-    "name": "@glacier/example-app",
+    "name": "@glacier-app/example-app",
     "version": "0.1.0",
     "main": "src/index.js",
     "type": "module",
@@ -7,10 +7,11 @@
     "license": "MIT",
     "description": "Example Glacier app",
     "scripts": {
-        "start": "node .",
-        "build": "glacier build"
+        "start": "glacier start",
+        "pack": "glacier pack src",
+        "build": "glacier build src"
     },
     "dependencies": {
-        "@glacier/core": "^0.1.0"
+        "@glacier-app/core": "^0.1.0"
     }
 }

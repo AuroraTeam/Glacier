@@ -1,2 +1,4 @@
 node_modules
 dist
+/packages/core/loader
+/packages/example-app/out

@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
+// @ts-check
+
+import { spawnSync } from 'child_process';
 import { readFile } from 'fs/promises';
-import { join, resolve } from 'path';
+import { join } from 'path';
 
 import { program } from 'commander';
 
-import { Builder } from './build.js';
+import { Bundler } from './bundler.js';
 
 async function readJson(path) {
     return JSON.parse(await readFile(path, 'utf8'));
@@ -15,40 +18,59 @@ const { version } = await readJson(
     join(import.meta.dirname, '../package.json'),
 );
 
-program.version(version).description('Glacier CLI tool');
+program.name('glacier').version(version).description('Glacier CLI toolchain');
+
+program
+    .command('start')
+    .argument('[directory]', 'directory to run', '.')
+    .description('Run application')
+    .action((dir) => {
+        let loaderName;
+        switch (process.platform) {
+            case 'win32':
+                loaderName = 'win.exe';
+                break;
+            case 'darwin':
+                loaderName = 'macos';
+                break;
+            case 'linux':
+                loaderName = 'linux';
+                break;
+            default:
+                break;
+        }
+
+        spawnSync(
+            join(import.meta.dirname, `../loader/loader-${loaderName}`),
+            [dir],
+            { stdio: 'inherit' },
+        );
+    });
+
+program
+    .command('pack')
+    .argument('[directory]', 'directory to pack', 'dist')
+    .option('-o, --output <path>', 'output directory path')
+    .description('Prepare a directory for build')
+    .action((dir, options) => {
+        Bundler.prepare(dir, options);
+    });
 
 program
     .command('build')
-    .argument('[script]', 'script to build')
-    .option('-o, --output <path>', 'output file')
-    .description('build executable file')
-    .action(async (script, options) => {
-        const workDir = process.cwd();
+    .argument('[directory]', 'directory to build', 'dist')
+    .option('-o, --output <path>', 'output file path')
+    .option('-n, --name <name>', 'output file name')
+    .description('Build application executable')
+    .action(Bundler.pack);
 
-        let indexFile;
-        if (script) {
-            indexFile = resolve(workDir, script);
-        } else {
-            const { main } = await readJson(join(workDir, 'package.json'));
-            indexFile = join(workDir, main);
-        }
+// Bundler.setData(
+//     output,
+//     join(workDir, 'resources/icon.ico'),
+//     'Example project',
+//     'Glacier',
+// );
 
-        const output = options.output
-            ? resolve(workDir, options.output)
-            : join(workDir, 'app.exe');
-
-        const builder = new Builder();
-
-        await builder.bundle(indexFile, output);
-
-        builder.setData(
-            output,
-            join(workDir, 'resources/icon.ico'),
-            'Example project',
-            'Glacier',
-        );
-
-        // builder.compress(output);
-    });
+// bundler.compress(output);
 
 program.parse();

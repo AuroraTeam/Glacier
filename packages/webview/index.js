@@ -1,1 +1,1 @@
-module.exports = require("./webview.js");
+module.exports = require("./webview");

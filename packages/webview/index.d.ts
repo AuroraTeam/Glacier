@@ -1,2 +1,1 @@
-import { Webview } from "webview-nodejs";
-export { Webview };
+export { Webview } from "webview-nodejs";
