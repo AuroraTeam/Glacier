@@ -1,4 +1,4 @@
-import { Window } from './core/window';
-import type { WindowConfig } from './core/windowConfig';
+import { Window } from './api/window';
+import type { WindowConfig } from './api/windowConfig';
 
 export { Window, WindowConfig };

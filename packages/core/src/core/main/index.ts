@@ -1,22 +1,24 @@
 // maybe need ASAR integration
 
 import { access, readFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 const [mainDir] = process.argv.slice(2);
 
-if (mainDir) {
-    tryLoadPackage(mainDir);
-} else {
-    tryLoadIndex();
+export function init() {
+    if (mainDir) {
+        tryLoadPackage(mainDir);
+    } else {
+        tryLoadIndex();
+    }
 }
+
+const require = createRequire(process.cwd());
 
 async function tryLoadIndex() {
     try {
-        await import(
-            pathToFileURL(resolve(process.cwd(), 'app', 'index.js')).href
-        );
+        require(resolve(process.cwd(), 'app', 'index.js'));
     } catch {
         console.error('Error! Main file not found');
     }
@@ -29,12 +31,18 @@ async function tryLoadPackage(mainDir: string) {
     );
     const { main } = JSON.parse(packageJson);
 
+    const mainPath = resolve(process.cwd(), main);
+
     try {
-        await access(resolve(process.cwd(), main));
+        await access(mainPath);
     } catch {
         console.error('Error! Main file not found');
         return;
     }
 
-    await import(pathToFileURL(resolve(process.cwd(), main)).href);
+    try {
+        require(mainPath);
+    } catch (error) {
+        console.error('Error loading module:', error);
+    }
 }

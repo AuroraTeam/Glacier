@@ -1,6 +1,6 @@
 {
     "name": "@glacier-app/core",
-    "version": "0.1.0",
+    "version": "0.2.0-dev",
     "main": "dist/index.js",
     "types": "dist/types/index.d.ts",
     "type": "module",
@@ -11,23 +11,22 @@
         "node": ">=20.11.0"
     },
     "scripts": {
-        "build": "npm run build:worker && npm run build:main && npm run build:_index && npm run build:loader && npm run types",
-        "build:worker": "esbuild src/worker/worker.ts --bundle --outfile=dist/worker.txt --loader:.html=text --platform=node --minify --legal-comments=none",
-        "build:loader": "esbuild src/loader.ts --bundle --outfile=loader/loader.js --platform=node --minify && pkg --sea loader/loader.js --out-path loader",
+        "build": "npm run build:main && npm run build:_index && npm run build:loader && npm run types",
         "build:main": "esbuild src/index.ts --bundle --outfile=dist/index.pack.js --platform=node --format=esm --minify",
         "build:_index": "echo export * from './index.pack.js'; > dist/index.js",
+        "build:loader": "esbuild src/core/loader.ts --bundle --outfile=loader/loader.js --platform=node --asset-names=[name] --loader:.node=copy && pkg loader/loader.js --out-path loader",
         "types": "tsc",
         "prettier": "prettier --config .prettierrc.json --write src",
         "typecheck": "tsc --noEmit",
         "lint": "eslint src --ext .ts,.tsx",
-        "lint:fix": "npm run lint -- --fix",
-        "postinstall": "npm run build"
+        "lint:fix": "npm run lint -- --fix"
     },
+    "assets": "loader/**/*.node",
     "keywords": [],
     "author": "AuroraTeam",
     "license": "MIT",
     "dependencies": {
-        "@glacier-app/webview": "^0.1.2",
+        "@glacier-app/webview": "^0.2.0",
         "@yao-pkg/pkg": "^6.1.1",
         "commander": "^12.1.0",
         "esbuild": "^0.24.0",
@@ -40,6 +39,7 @@
         "@types/node": "^22.10.1",
         "@typescript-eslint/eslint-plugin": "^7.1.1",
         "@typescript-eslint/parser": "^7.1.1",
+        "bpkg": "^0.9.2",
         "eslint": "^8.56.0",
         "import-sort-style-module": "^6.0.0",
         "prettier": "^3.2.5",

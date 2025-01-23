@@ -7,3 +7,7 @@
 ## How to build example app
 
 run `npm i` and `npm run build:example`
+
+---
+
+Сборка с Node SEA пока не работает, думаю требуется написать плагин для `esbuild` для копирования .node файлов
