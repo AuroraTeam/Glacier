@@ -1,6 +1,5 @@
 {
     "name": "glacier-app",
-    "version": "0.1.0",
     "description": "Glacier is a framework that allows you to build cross-platform desktop applications using Node.js and webview.",
     "workspaces": [
         "packages/*"
