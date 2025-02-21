@@ -64,13 +64,4 @@ program
     .description('Build application executable')
     .action(Bundler.pack);
 
-// Bundler.setData(
-//     output,
-//     join(workDir, 'resources/icon.ico'),
-//     'Example project',
-//     'Glacier',
-// );
-
-// bundler.compress(output);
-
 program.parse();

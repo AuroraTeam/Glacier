@@ -1,7 +1,8 @@
 {
     "name": "@glacier-app/example-app",
     "version": "0.1.0",
-    "main": "src/index.js",
+    "main": "src/main/index.js",
+    "type": "module",
     "author": "AuroraTeam",
     "license": "MIT",
     "description": "Example Glacier app",
@@ -12,5 +13,9 @@
     },
     "dependencies": {
         "@glacier-app/core": "^0.2.0-dev"
+    },
+    "glacier": {
+        "appName": "Example App",
+        "appDescription": "Example Glacier app"
     }
 }

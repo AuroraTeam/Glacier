@@ -1,12 +1,12 @@
-// @ts-check
-
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { cp, mkdir, readFile, rm, writeFile } from 'fs/promises';
-import { basename, join, resolve } from 'path';
+import { cp, mkdir, readFile, rm } from 'fs/promises';
+import { join, resolve } from 'path';
 
+import esbuild from 'esbuild';
 import { NtExecutable, NtExecutableResource } from 'pe-library';
 import { Data, Resource } from 'resedit';
-import UPX from 'upx';
+
+// import UPX from 'upx';
 
 async function readJson(path) {
     return JSON.parse(await readFile(path, 'utf8'));
@@ -16,80 +16,105 @@ export class Bundler {
     static async prepare(dir, options) {
         // Prepare
         const workDir = process.cwd();
-        const packDir = resolve(workDir, dir);
+        const sourceDir = resolve(workDir, dir);
 
-        if (!existsSync(packDir)) {
-            console.error('Error! Directory not found');
+        if (!existsSync(sourceDir)) {
+            console.error(`Error! Directory ${sourceDir} not found`);
             process.exit(0);
         }
 
-        const output = options.output
+        const outputDir = options.output
             ? resolve(workDir, options.output)
             : join(workDir, 'out');
 
-        const appDir = join(output, 'app');
+        const outAppDir = join(outputDir, 'app');
 
-        const { main } = await readJson(join(workDir, 'package.json'));
-        const mainFile = basename(main);
+        const { name, main, glacier } = await readJson(
+            join(workDir, 'package.json'),
+        );
+        const mainFile = resolve(workDir, main);
 
         // Action
-        await rm(output, { recursive: true, force: true });
-        await mkdir(appDir, { recursive: true });
+        await rm(outputDir, { recursive: true, force: true });
+        await mkdir(outAppDir, { recursive: true });
 
-        // await writeFile(
-        //     join(output, 'package.json'),
-        //     `{"main":"index.js","pkg":{"assets": "."}}`,
-        //     'utf8',
-        // );
-        await cp(packDir, appDir, { recursive: true });
+        const rendererDir = join(sourceDir, 'renderer');
+        if (!existsSync(rendererDir)) {
+            console.error(`Error! Directory ${rendererDir} not found`);
+            process.exit(0);
+        }
 
-        let loaderName;
+        await cp(rendererDir, join(outAppDir, 'renderer'), { recursive: true });
+
+        let loaderSuffix;
         switch (process.platform) {
             case 'win32':
-                loaderName = 'win.exe';
+                loaderSuffix = 'win.exe';
                 break;
             case 'darwin':
-                loaderName = 'macos';
+                loaderSuffix = 'macos';
                 break;
             case 'linux':
-                loaderName = 'linux';
+                loaderSuffix = 'linux';
                 break;
             default:
                 break;
         }
 
+        let appName = glacier?.appName || name || 'app';
+        appName = appName.replace(/[^a-zA-Z0-9]/g, '');
+
+        const appDescription = glacier?.appDescription || 'Glacier app';
+
+        const appExt = process.platform === 'win32' ? '.exe' : '';
+
+        const outputExecutable = join(outputDir, `${appName}${appExt}`);
         await cp(
-            join(import.meta.dirname, `../loader/loader-${loaderName}`),
-            join(output, `app-${loaderName}`),
+            join(import.meta.dirname, `../loader/loader-${loaderSuffix}`),
+            outputExecutable,
         );
 
-        const indexFile = join(appDir, 'index.js');
-        if (mainFile !== 'index.js') {
-            await writeFile(indexFile, `require("./${mainFile}");`, 'utf8');
-        }
+        await esbuild.build({
+            entryPoints: [mainFile],
+            bundle: true,
+            platform: 'node',
+            format: 'esm',
+            outfile: join(outAppDir, 'main.js'),
+        });
 
-        return { output };
+        this.#setData(
+            outputExecutable,
+            join(workDir, 'resources/icon.ico'),
+            appDescription,
+            appName,
+        );
+
+        // Error: Permission denied
+        // this.#compress(outputExecutable);
+
+        return { outputDir };
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     static async pack(dir, options) {
-        // const { output } = await Bundler.prepare(dir, options);
+        // const { outputDir } = await Bundler.prepare(dir, options);
         console.log('Reworked');
     }
 
-    /**
-     * @param {string} file - executable file
-     */
-    static compress(file) {
-        const upx = UPX(file, { best: true, force: true });
-        upx.output(file)
-            .start()
-            .then(function (stats) {
-                console.log(stats);
-            })
-            .catch(function (err) {
-                console.log(err);
-            });
-    }
+    // /**
+    //  * @param {string} file - executable file
+    //  */
+    // static #compress(file) {
+    //     const upx = UPX(file, { best: true, force: true });
+    //     upx.output(file)
+    //         .start()
+    //         .then(function (stats) {
+    //             console.log(stats);
+    //         })
+    //         .catch(function (err) {
+    //             console.log(err);
+    //         });
+    // }
 
     /**
      *
@@ -98,7 +123,7 @@ export class Bundler {
      * @param {string} fileDescription - file description
      * @param {string} productName - product name
      */
-    static setData(bin, icon, fileDescription, productName) {
+    static #setData(bin, icon, fileDescription, productName) {
         const data = readFileSync(bin);
 
         const exe = NtExecutable.from(data, { ignoreCert: true });
@@ -121,10 +146,7 @@ export class Bundler {
         vi.setFileVersion(0, 0, 0, 1);
         vi.setStringValues(
             { lang: 1033, codepage: 1200 },
-            {
-                FileDescription: fileDescription,
-                ProductName: productName,
-            },
+            { FileDescription: fileDescription, ProductName: productName },
         );
         vi.outputToResourceEntries(res.entries);
 

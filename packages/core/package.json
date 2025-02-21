@@ -14,7 +14,7 @@
         "build": "npm run build:main && npm run build:_index && npm run build:loader && npm run types",
         "build:main": "esbuild src/index.ts --bundle --outfile=dist/index.pack.js --platform=node --format=esm --minify",
         "build:_index": "echo export * from './index.pack.js'; > dist/index.js",
-        "build:loader": "esbuild src/core/loader.ts --bundle --outfile=loader/loader.js --platform=node --asset-names=[name] --loader:.node=copy && pkg loader/loader.js --out-path loader",
+        "build:loader": "esbuild src/core/loader.ts --bundle --outfile=loader/loader.js --platform=node --loader:.node=copy && pkg loader/loader.js --out-path loader",
         "types": "tsc",
         "prettier": "prettier --config .prettierrc.json --write src",
         "typecheck": "tsc --noEmit",

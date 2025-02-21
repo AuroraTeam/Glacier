@@ -18,7 +18,7 @@ const require = createRequire(process.cwd());
 
 async function tryLoadIndex() {
     try {
-        require(resolve(process.cwd(), 'app', 'index.js'));
+        require(resolve(process.cwd(), 'app', 'main.js'));
     } catch {
         console.error('Error! Main file not found');
     }
