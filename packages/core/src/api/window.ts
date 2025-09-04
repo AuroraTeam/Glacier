@@ -13,22 +13,24 @@ class Window {
 
     on(event: 'error', listener: (err: Error) => void): this;
     on(event: 'exit', listener: (exitCode: number) => void): this;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     on(event: 'message', listener: (value: any) => void): this;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     on(event: string, listener: (...args: any[]) => void) {
         this.#process.on(event, listener);
         return this;
     }
 
-    // setHtml(html: string) {
-    //     this.#process.send({ type: 'setHtml', html });
-    // }
+    loadHtml(html: string) {
+        this.#send('loadHtml', html);
+    }
 
     loadUrl(url: string) {
         this.#send('loadUrl', url);
     }
 
     // loadFile(path: string) {
-    //     this.#process.send({ type: 'loadFile', path });
+    //     this.#send('loadFile', path);
     // }
 
     show() {

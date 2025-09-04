@@ -1,5 +1,3 @@
-import { tmpdir } from 'os';
-
 import { Window } from '@glacier-app/webview';
 
 import { WindowConfig } from '../../api/windowConfig';
@@ -12,32 +10,36 @@ export function init() {
 
 export interface IPCMessage {
     type: string;
-    payload?: any;
+    payload?: unknown;
 }
 
-// Temp
-function getTempDir() {
-    return tmpdir() + '/glacier';
-}
-
-let webviewWindow = new Window(getTempDir());
+let webviewWindow: Window;
 
 function ipcMessageParser(message: IPCMessage) {
     switch (message.type) {
-        case 'init':
-            const windowConfig: WindowConfig = message.payload;
+        case 'init': {
+            const windowConfig = <WindowConfig>message.payload;
 
-            webviewWindow.setTitle(windowConfig.title);
-            // webviewWindow.setSize(windowConfig.width, windowConfig.height);
-            // webviewWindow.setHtml(defaultHtml);
+            webviewWindow = new Window({
+                width: windowConfig.width || 800,
+                height: windowConfig.height || 600,
+                title: windowConfig.title || 'Glacier',
+            });
             break;
+        }
 
         case 'loadUrl':
-            webviewWindow.setUrl(message.payload);
+            webviewWindow.loadUrl(<string>message.payload);
+            break;
+
+        case 'loadHtml':
+            webviewWindow.loadHtml(<string>message.payload);
             break;
 
         case 'show':
-            webviewWindow.create();
+            webviewWindow.create((data: string) => {
+                console.log(data);
+            });
             break;
 
         default:
@@ -45,43 +47,3 @@ function ipcMessageParser(message: IPCMessage) {
             break;
     }
 }
-
-// webviewWindow.bind('__call_backend', () => {
-//     if (!parentPort) return;
-
-//     let message = receiveMessageOnPort(parentPort);
-//     if (!message) return;
-
-//     processMessage(message.message);
-// });
-
-// const { node, v8, glacier } = process.versions;
-
-// webviewWindow.init(
-//     `setInterval(() => __call_backend(), 4);const __versions = {node:"${node}", v8:"${v8}", glacier:"${glacier}"};`,
-// );
-
-// if (windowConfig.width && windowConfig.height) {
-//     webviewWindow.size(windowConfig.width, windowConfig.height);
-// }
-
-// if (windowConfig.title) {
-//     webviewWindow.title(windowConfig.title);
-// }
-
-// webviewWindow.html(defaultHtml);
-// webviewWindow.show();
-
-// function processMessage(message: any) {
-//     if (message.type === 'setHtml') {
-//         webviewWindow.html(message.html);
-//     }
-
-//     if (message.type === 'loadUrl') {
-//         webviewWindow.navigate(message.url);
-//     }
-
-//     if (message.type === 'loadFile') {
-//         webviewWindow.navigate(message.path);
-//     }
-// }
